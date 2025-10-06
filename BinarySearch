@@ -1,0 +1,39 @@
+import java.util.*;
+
+public class BinarySearch {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // Sorted array (hidden from user)
+        int data[] = {15, 31, 35, 38, 44, 46, 55, 79, 90, 92};
+
+        // Give only hint
+        System.out.println("Hint: The array contains 10 sorted numbers between 15 and 92.");
+        System.out.print("Enter number to search: ");
+        int s = sc.nextInt();
+
+        int si = 0;                   // starting index
+        int li = data.length - 1;     // last index
+        int found = -1;               // initially not found
+
+        while (found < 0 && si <= li) {
+            int mi = (si + li) / 2;   // middle index
+
+            if (s == data[mi]) {
+                found = mi;           // element found
+            } else if (s < data[mi]) {
+                li = mi - 1;          // search left side
+            } else {
+                si = mi + 1;          // search right side
+            }
+        }
+
+        if (found >= 0) {
+            System.out.println("Found at position (index): " + found);
+        } else {
+            System.out.println("Not found in array.");
+        }
+
+        sc.close();
+    }
+}
