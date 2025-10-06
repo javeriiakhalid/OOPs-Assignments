@@ -1,0 +1,40 @@
+import java.io.*;
+import java.net.*;
+
+public class TCPClient {
+    public static void main(String[] args) throws IOException {
+        Socket socket = new Socket("localhost", 9090);
+        System.out.println("Connected with server: " + socket.getInetAddress());
+
+        DataInputStream in = new DataInputStream(socket.getInputStream());
+        DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        String fromServer = "", fromUser = "";
+
+        while (true) {
+            System.out.print("Client: ");
+            fromUser = console.readLine();
+            out.writeUTF(fromUser);
+            out.flush();
+
+            if (fromUser.equalsIgnoreCase("quit")) {
+    
+                break;
+            }
+
+            fromServer = in.readUTF();
+            System.out.println("Server: " + fromServer);
+
+            if (fromServer.equalsIgnoreCase("quit")) {
+                System.out.println("Server ended the chat.");
+                break;
+            }
+        }
+
+        in.close();
+        out.close();
+        socket.close();
+    System.out.println("Server disconnected.");   
+    }
+}
