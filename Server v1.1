@@ -1,0 +1,42 @@
+import java.io.*;
+import java.net.*;
+
+public class TCPServer {
+    public static void main(String[] args) throws IOException {
+        ServerSocket serverSocket = new ServerSocket(9090);
+        System.out.println("Server started. Waiting for client...");
+
+        Socket socket = serverSocket.accept();
+        System.out.println("Client connected: " + socket.getInetAddress());
+
+        DataInputStream in = new DataInputStream(socket.getInputStream());
+        DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        String fromClient = "", fromServer = "";
+
+        while (true) {
+            fromClient = in.readUTF();
+            System.out.println("Client: " + fromClient);
+
+            if (fromClient.equalsIgnoreCase("quit")) {
+                break;
+            }
+
+            System.out.print("Server: ");
+            fromServer = console.readLine();
+            out.writeUTF(fromServer);
+            out.flush();
+
+            if (fromServer.equalsIgnoreCase("quit")) {
+                break;
+            }
+        }
+
+        in.close();
+        out.close();
+        socket.close();
+        serverSocket.close();
+        System.out.println("Server disconnected.");
+    }
+}
