@@ -1,0 +1,72 @@
+import java.util.*;
+
+public class SimpleHammingCode {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter data bits (e.g., 1101): ");
+        String input = sc.next();
+
+        System.out.print("Enter parity type (EVEN/ODD): ");
+        String parityType = sc.next().toUpperCase();
+
+        int m = input.length();
+        int r = 0;
+
+        // Find how many parity bits are needed
+        while (Math.pow(2, r) < (m + r + 1))
+            r++;
+
+        int totalBits = m + r;
+
+        // Using ArrayList instead of array (1-based indexing simulated)
+        ArrayList<Integer> hamming = new ArrayList<>(Collections.nCopies(totalBits + 1, 0));
+        int dataIndex = 0;
+
+        // Fill data bits in non-parity positions
+        for (int i = 1; i <= totalBits; i++) {
+            if (isPowerOfTwo(i)) {
+                hamming.set(i, 0); // Placeholder for parity
+            } else {
+                hamming.set(i, input.charAt(dataIndex) - '0');
+                dataIndex++;
+            }
+        }
+
+        System.out.println("\n--- Calculating Hamming Parity Bits ---");
+
+        // Calculate parity bits
+        for (int i = 0; i < r; i++) {
+            int position = (int) Math.pow(2, i);
+            int sum = 0;
+
+            // Count bits covered by this parity bit
+            for (int k = position; k <= totalBits; k += 2 * position) {
+                for (int x = k; x < k + position && x <= totalBits; x++) {
+                    sum += hamming.get(x);
+                }
+            }
+
+            // Determine parity bit
+            int hBit;
+            if (parityType.equals("EVEN")) {
+                hBit = (sum % 2 == 0) ? 0 : 1;
+            } else {
+                hBit = (sum % 2 == 0) ? 1 : 0;
+            }
+
+            hamming.set(position, hBit);
+
+            // Show working
+            System.out.println("H" + position + " (Sum) = " + sum + " , H" + position + " = " + hBit);
+        }
+
+        sc.close();
+    }
+
+    // Helper: check if a number is power of 2
+    static boolean isPowerOfTwo(int x) {
+        return (x & (x - 1)) == 0;
+    }
+}
