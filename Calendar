@@ -1,0 +1,33 @@
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
+
+public class CalendarPrinter {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter year: ");
+        int year = scanner.nextInt();
+
+        System.out.print("Enter month (1-12): ");
+        int month = scanner.nextInt();
+
+        YearMonth yearMonth = YearMonth.of(year, month);
+
+        System.out.println("Calendar for the month of " + yearMonth.getMonth() + ", " + year);
+        System.out.println("Su Mo Tu We Th Fr Sa");
+
+        int dayOfWeek = LocalDate.of(year, month, 1).getDayOfWeek().getValue();
+        for (int i = 1; i < dayOfWeek; i++) {
+            System.out.print("   ");
+        }
+
+        for (int i = 1; i <= yearMonth.lengthOfMonth(); i++) {
+            System.out.printf("%2d ", i);
+            if ((i + dayOfWeek - 1) % 7 == 0) {
+                System.out.println();
+            }
+        }
+    }
+}
