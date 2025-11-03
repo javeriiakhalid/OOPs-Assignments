@@ -1,0 +1,50 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+public class MenuFromHeader {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        
+        // Ask user for file name
+        System.out.print("Enter the file name (with path if needed): ");
+        String fileName = input.nextLine();
+        
+        try {
+            // Open file with Scanner
+            Scanner fileScanner = new Scanner(new File(fileName));
+            
+            // Read the first line (header line)
+            if (fileScanner.hasNextLine()) {
+                String headerLine = fileScanner.nextLine();
+                // Split header by tab character
+                String[] headers = headerLine.split("\\t");
+                
+                // Display auto-generated menu
+                System.out.println("\n=== Auto-Generated Menu ===");
+                for (int i = 0; i < headers.length; i++) {
+                    System.out.printf("%d. %s%n", i + 1, headers[i]);
+                }
+                
+                // Let user choose an option
+                System.out.print("\nEnter your choice (1-" + headers.length + "): ");
+                int choice = input.nextInt();
+                
+                // Validate and display selected column
+                if (choice >= 1 && choice <= headers.length) {
+                    System.out.println("You selected: " + headers[choice - 1]);
+                } else {
+                    System.out.println("Invalid choice!");
+                }
+            } else {
+                System.out.println("The file is empty.");
+            }
+            
+            fileScanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + fileName);
+        }
+        
+        input.close();
+    }
+}
