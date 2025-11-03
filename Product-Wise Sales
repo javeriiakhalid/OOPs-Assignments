@@ -1,0 +1,72 @@
+import java.io.*;    // For reading files
+
+public class ProductSales {
+    public static void main(String[] args) {
+
+        // File name (must be in same folder as this Java file)
+        String fileName = "EVE01Sales.txt";
+
+        // Variables to store total sales for each product
+        int totalA = 0;
+        int totalB = 0;
+        int totalC = 0;
+        int totalD = 0;
+
+        // Variable for overall total
+        int grandTotal = 0;
+
+        try {
+            // Open the file
+            FileReader fr = new FileReader(fileName);
+            BufferedReader br = new BufferedReader(fr);
+
+            String line;
+
+            // Read the first line (header) and skip it
+            br.readLine();
+
+            // Read all lines one by one
+            while ((line = br.readLine()) != null) {
+
+                // Split each line by tab spaces
+                String[] data = line.split("\t");
+
+                // Extract product, quantity, and price
+                String product = data[3];
+                int quantity = Integer.parseInt(data[4]);
+                int price = Integer.parseInt(data[5]);
+
+                // Calculate amount for this line
+                int amount = quantity * price;
+
+                // Add amount to the correct product total
+                if (product.equalsIgnoreCase("Product A")) {
+                    totalA = totalA + amount;
+                } else if (product.equalsIgnoreCase("Product B")) {
+                    totalB = totalB + amount;
+                } else if (product.equalsIgnoreCase("Product C")) {
+                    totalC = totalC + amount;
+                } else if (product.equalsIgnoreCase("Product D")) {
+                    totalD = totalD + amount;
+                }
+
+                // Add to grand total
+                grandTotal = grandTotal + amount;
+            }
+
+            // Close the file
+            br.close();
+
+            // Print the results clearly
+            System.out.println("Product\t\tSum of amount");
+            System.out.println("Product A\t\t" + totalA);
+            System.out.println("Product B\t\t" + totalB);
+            System.out.println("Product C\t\t" + totalC);
+            System.out.println("Product D\t\t" + totalD);
+            System.out.println("Grand Total\t\t" + grandTotal);
+
+        } catch (Exception e) {
+            System.out.println("Error reading the file: " + e.getMessage());
+        }
+    }
+}
